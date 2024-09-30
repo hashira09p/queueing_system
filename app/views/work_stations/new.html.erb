@@ -1,0 +1,11 @@
+<div class="login-container">
+  <%= form_with model: @work_station do |form| %>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+    <%= form.label :status %>
+    <%= form.text_field :status %>
+
+    <button type="submit">Submit</button>
+  <% end %>
+</div>
