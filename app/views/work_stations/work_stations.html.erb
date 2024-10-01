@@ -1,0 +1,17 @@
+<% @work_stations.each do |work_station| %>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><%= work_station.name %></td>
+      <td><%= work_station.status %></td>
+
+    </tr>
+    </tbody>
+  </table>
+<% end %>
