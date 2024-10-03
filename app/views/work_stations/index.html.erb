@@ -1,2 +1,29 @@
-<%= link_to 'new', new_work_station_path %>
-<%= link_to 'work_station', work_stations_path %>
+<div class="container">
+  <div class="row">
+    <% @work_stations.each do |work_station| %>
+      <div class="col-md-4 mb-4">
+        <%= link_to work_station_path(work_station), style: 'text-decoration: none;' do %>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= work_station.name.upcase %></h5>
+              <% if work_station.online? %>
+                <p class="card-text text-primary">
+                  <%= work_station.status.upcase %>
+                </p>
+              <% elsif work_station.break? %>
+                <p class="card-text text-danger">
+                  <%= work_station.status.upcase %>
+                </p>
+              <% else %>
+                <p class="card-text text-warning">
+                  <%= work_station.status.upcase %>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

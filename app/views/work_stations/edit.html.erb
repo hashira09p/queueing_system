@@ -1,6 +1,26 @@
-<%= form_with model: @work_station do |form| %>
-  <%= form.text_field :name %>
-  <%= form.collection_select :status,
-                             WorkStation.statuses.keys.map { |key| [key.humanize, key] }, :last, :first, prompt: 'Choose a status' %>
-  <%= form.submit %>
-<% end %>
+<div class="container d-flex justify-content-center align-items-center vh-20">
+  <div class="card" style="width: 25rem;">
+    <div class="card-body">
+      <h1 class="card-title text-center mb-4">Editing <%= @work_station.name %></h1>
+      <%= form_with model: @work_station, class: 'needs-validation', novalidate: true do |form| %>
+
+        <div class="mb-3">
+          <%= form.label :name, class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter Work Station Name' %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :status, class: 'form-label' %>
+          <%= form.collection_select :status,
+                                     WorkStation.statuses.keys.map { |key| [key.humanize, key] },
+                                     :last, :first,
+                                     { prompt: 'Choose a status' },
+                                     { class: 'form-select' } %>
+        </div>
+
+        <%= form.submit 'Submit', class: 'btn btn-primary w-100' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+

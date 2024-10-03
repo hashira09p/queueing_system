@@ -10,7 +10,10 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
+  <body class="text-center justify-content-center align-content-center">
+    <% unless action_name == 'queueing_lists' || (controller_name == 'tickets' && ['show', 'new'].include?(action_name)) %>
+    <%= render 'layouts/shared/header' %>
+      <% end %>
     <%= yield %>
   </body>
 </html>

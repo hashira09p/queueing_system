@@ -1,5 +1,7 @@
 class WorkStationsController < ApplicationController
-  before_action :set_work_station, only: [:show, :edit, :update, :destroy]
+  #railsbefore_action :set_work_station, only: [:show, :edit, :update, :destroy, :next, :finish]
+  before_action :set_work_station, except: [:index, :new, :create, :queueing_lists]
+
   def index
     @work_stations = WorkStation.all
   end
@@ -13,19 +15,20 @@ class WorkStationsController < ApplicationController
     @work_station.name = params[:work_station][:name]
     @work_station.status = params[:work_station][:status]
     @work_station.save
-    redirect_to work_station_path(@work_station)
-  end
-
-  def work_stations
-    @work_stations = WorkStation.all
+    redirect_to root_path
   end
 
   def edit; end
 
   def update
     if @work_station.update(work_station_params)
-       redirect_to work_stations_path
+      redirect_to work_stations_path
     end
+  end
+
+  def show
+    @pending_tickets = Ticket.pending
+    @serving_ticket = @work_station.tickets.active.first
   end
 
   def destroy
@@ -34,9 +37,42 @@ class WorkStationsController < ApplicationController
     end
   end
 
+  def online
+    @work_station.online!
+    redirect_to work_station_path(@work_station)
+  end
+
+  def offline
+    @work_station.offline!
+    redirect_to work_station_path(@work_station)
+  end
+
+  def break
+    @work_station.break!
+    redirect_to work_station_path(@work_station)
+  end
+
+  def next
+    @pending_ticket = Ticket.pending.first
+    @pending_ticket.update(status: :active, active_at: Time.current, work_station: @work_station)
+    redirect_to work_station_path(@work_station)
+  end
+
+  def finish
+    @active_ticket = @work_station.tickets.active.first
+    @active_ticket.update(status: :finished, finished_at: Time.current)
+    redirect_to work_station_path(@work_station)
+  end
+
+  def queueing_lists
+    @work_stations = WorkStation.includes(:tickets).all
+  end
+
   private
+
   def set_work_station
-    @work_station = WorkStation.find(params[:id])
+    @work_station = WorkStation.find(params[:id] || params[:work_station_id])
+
   end
 
   def work_station_params

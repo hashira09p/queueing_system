@@ -1,0 +1,30 @@
+<div class="container mt-5">
+  <h1>SERVING</h1>
+  <div class="row mt-5">
+    <% @work_stations.each do |work_station| %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title"><%= work_station.name.upcase %></h2>
+            <% serving_ticket = work_station.tickets.active.last %>
+            <% if serving_ticket && work_station.online? %>
+              <h2><span class="badge text-bg-primary"><%= serving_ticket.ticket_number %></span></h2>
+              <% elsif work_station.break?%>
+              <h2><span class="badge text-bg-warning">BREAK</span></h2>
+              <% elsif work_station.offline? %>
+              <h2><span class="badge text-bg-secondary">OFFLINE</span></h2>
+            <% else %>
+              <h2><span class="badge text-bg-primary">...</span></h2>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+    setTimeout(function(){
+        window.location.reload(1);
+    }, 2000); // 2000 milliseconds = 2 seconds
+</script>
