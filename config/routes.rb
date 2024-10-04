@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     patch 'break'
   end
   resources :tickets do
-    get 'generate', on: :collection
+    post 'generate', on: :collection
+    get 'display_transactions', on: :collection
   end
+  resources :available_transactions
 end

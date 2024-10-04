@@ -1,7 +1,7 @@
 <div class="container d-flex justify-content-center align-items-center vh-20">
   <div class="card" style="width: 25rem;">
     <div class="card-body">
-      <h1 class="card-title text-center mb-4">Editing <%= @work_station.name %></h1>
+      <h1 class="card-title text-center mb-4"><%= @work_station.name %></h1>
       <%= form_with model: @work_station, class: 'needs-validation', novalidate: true do |form| %>
 
         <div class="mb-3">

@@ -11,7 +11,11 @@
   </head>
 
   <body class="text-center justify-content-center align-content-center">
-    <% unless action_name == 'queueing_lists' || (controller_name == 'tickets' && ['show', 'new'].include?(action_name)) %>
+    <% remove_header = [
+      action_name == 'queueing_lists',
+      (controller_name == 'tickets' && ['show', 'new', 'display_transactions'].include?(action_name))
+    ] %>
+    <% unless remove_header.find { |header| header == true } %>
     <%= render 'layouts/shared/header' %>
       <% end %>
     <%= yield %>

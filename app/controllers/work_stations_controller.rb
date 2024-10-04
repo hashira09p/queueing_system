@@ -22,12 +22,13 @@ class WorkStationsController < ApplicationController
 
   def update
     if @work_station.update(work_station_params)
-      redirect_to work_stations_path
+      redirect_to work_station_path(@work_station)
     end
+    # render json: params
   end
 
   def show
-    @pending_tickets = Ticket.pending
+    @pending_tickets = Ticket.where(available_transaction_id: @work_station.available_transactions.ids).pending
     @serving_ticket = @work_station.tickets.active.first
   end
 
@@ -76,6 +77,6 @@ class WorkStationsController < ApplicationController
   end
 
   def work_station_params
-    params.require(:work_station).permit(:name, :status)
+    params.require(:work_station).permit(:name, :status, available_transaction_ids: [])
   end
 end

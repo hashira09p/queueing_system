@@ -18,8 +18,14 @@ class TicketsController < ApplicationController
     cookies[:ticket_id] = Ticket.where(created_at: Time.current.beginning_of_day...Time.current.end_of_day).count
     @ticket = Ticket.new
     @ticket.ticket_number = cookies[:ticket_id] + 1
+    @ticket.available_transaction_id = params[:available_transaction_id]
+    @ticket.other = params[:others]
     @ticket.save
     redirect_to ticket_path(@ticket)
+  end
+
+  def display_transactions
+    @available_transactions = AvailableTransaction.all
   end
 
   def show
@@ -29,6 +35,6 @@ class TicketsController < ApplicationController
   private
 
   def ticket_link
-    "#{request.base_url}#{generate_tickets_path}"
+    "#{request.base_url}#{display_transactions_tickets_path}"
   end
 end

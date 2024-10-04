@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_30_085608) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_04_061543) do
+  create_table "available_transactions", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tickets", charset: "utf8mb4", force: :cascade do |t|
     t.integer "ticket_number"
     t.bigint "work_station_id"
@@ -19,7 +25,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_30_085608) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "available_transaction_id", null: false
+    t.string "other"
     t.index ["work_station_id"], name: "index_tickets_on_work_station_id"
+  end
+
+  create_table "work_station_transactions", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "work_station_id"
+    t.bigint "available_transaction_id"
+    t.index ["available_transaction_id"], name: "index_work_station_transactions_on_available_transaction_id"
+    t.index ["work_station_id"], name: "index_work_station_transactions_on_work_station_id"
   end
 
   create_table "work_stations", charset: "utf8mb4", force: :cascade do |t|
