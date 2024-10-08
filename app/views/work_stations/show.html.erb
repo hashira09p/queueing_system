@@ -4,8 +4,10 @@
       <h2><%= @work_station.name.upcase %> | <%= @work_station.status.upcase %></h2>
       <div class="d-flex justify-content-center align-content-center align-text-center gap-2">
         <% if @work_station.online? %>
-          <%= button_to 'Offline', work_station_offline_path(@work_station), method: :patch, class: 'btn btn-secondary' %>
-          <%= button_to 'Break', work_station_break_path(@work_station), method: :patch, class: 'btn btn-warning' %>
+          <% if !@serving_ticket.present? %>
+            <%= button_to 'Offline', work_station_offline_path(@work_station), method: :patch, class: 'btn btn-secondary' %>
+            <%= button_to 'Break', work_station_break_path(@work_station), method: :patch, class: 'btn btn-warning' %>
+          <% end %>
         <% elsif @work_station.break? %>
           <%= button_to 'Online', work_station_online_path(@work_station), method: :patch, class: 'btn btn-primary' %>
           <%= button_to 'Offline', work_station_offline_path(@work_station), method: :patch, class: 'btn btn-secondary' %>
@@ -33,7 +35,7 @@
               </div>
             </div>
             <div class="form-group mt-2">
-              <%= form.submit 'Update', class: 'btn btn-primary' %>
+              <%= form.submit 'Update', class: 'btn btn-primary', disabled: @serving_ticket.present? %>
             </div>
           <% end %>
         <% else %>
@@ -46,7 +48,7 @@
       <div class="card">
         <div class="card-body">
           <h2>Serving
-            Ticket &nbsp;<span class="badge text-bg-secondary"><%= @serving_ticket&.ticket_number || 'None' %></span>
+            Ticket &nbsp;<span class="badge text-bg-secondary"><%= @serving_ticket&.ticket_number || 0 %></span>
           </h2>
         </div>
       </div>
@@ -71,7 +73,7 @@
       <div class="col-md-4 align-content-center mb-4">
         <% if @serving_ticket.present? %>
           <%= button_to 'Finish Ticket', work_station_finish_path(@work_station), method: :patch, class: 'btn btn-success' %>
-        <% else @pending_tickets.any? %>
+        <% elsif @pending_tickets.any? %>
           <%= button_to 'Next', work_station_next_path(@work_station), method: :patch, class: 'btn btn-success' %>
         <% end %>
       </div>

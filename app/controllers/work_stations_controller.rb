@@ -1,5 +1,4 @@
 class WorkStationsController < ApplicationController
-  #railsbefore_action :set_work_station, only: [:show, :edit, :update, :destroy, :next, :finish]
   before_action :set_work_station, except: [:index, :new, :create, :queueing_lists]
 
   def index
@@ -29,7 +28,7 @@ class WorkStationsController < ApplicationController
 
   def show
     @pending_tickets = Ticket.where(available_transaction_id: @work_station.available_transactions.ids).pending
-    @serving_ticket = @work_station.tickets.active.first
+    @serving_ticket = @work_station.tickets.where(available_transaction_id: @work_station.available_transactions.ids).active.first
   end
 
   def destroy
@@ -54,7 +53,7 @@ class WorkStationsController < ApplicationController
   end
 
   def next
-    @pending_ticket = Ticket.pending.first
+    @pending_ticket = Ticket.where(available_transaction_id: @work_station.available_transactions.ids).pending.first
     @pending_ticket.update(status: :active, active_at: Time.current, work_station: @work_station)
     redirect_to work_station_path(@work_station)
   end
